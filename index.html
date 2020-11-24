@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Random Name Example</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script src="browser_compiled.js"></script>
+        <style>
+            html {
+                height: 100%;
+                background: aliceblue;
+            }
+            #generate {
+                position: relative;
+                left: 50%;
+                transform: translateX(-50%);
+                font-size: 56px;
+                padding: 16px;
+                border-radius: 8px;
+                border: 4px solid;
+            }
+
+            #result-wrap {
+                text-align: center;
+            }
+
+            #result {
+                font-size: 72px;
+                color: white;
+                background: rgba(0, 0, 0, 0.3);
+                text-shadow: black 0px 0px 3px, black 0px 0px 3px, black 0px 0px 3px;
+                padding: 0 8px;
+                border-radius: 4px;
+            }
+        </style>
+    </head>
+    <body>
+        <button id="generate">Generate</button>
+        <h2 id="result-wrap">
+            <span id="result">RandomIGN</span>
+        </h2>
+        <script>
+            const generate = document.getElementById("generate");
+            const result = document.getElementById("result");
+            generate.addEventListener("click", () => {
+                result.innerText = window.getRandomName();
+            });
+        </script>
+    </body>
+</html>
