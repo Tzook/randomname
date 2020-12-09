@@ -1,5 +1,12 @@
 const faker = require("faker");
 const _ = require("lodash");
+const fs = require("fs");
+let names;
+if (fs && fs.readFileSync) {
+    const file = fs.readFileSync("./names.txt", "utf-8");
+    names = file.split("\n");
+    names.pop(); // Remove the empty newline at the end.
+}
 
 const COMMON_PREFIXES = ["lol", "lel", "kek", "haha", "hehe", "Epic", "Evil", "Demon", "Bad", "The", "New", "My"];
 const FEMALE_PREFIXES = ["Ms", "Mrs", "Miss", "Sexy", "Sakura", "Kitty", "Lovely", "Angel", "Hot", "Lady"];
@@ -37,6 +44,9 @@ const NAME_MODIFIERS = [
 ];
 
 module.exports.getRandomName = function getRandomName({ isMale = true, maxLength = 16 } = {}) {
+    if (names && faker.random.boolean()) {
+        return faker.random.arrayElement(names).slice(0, maxLength);
+    }
     let name = getBaseName(isMale, maxLength).replace(/[^a-zA-Z0-9]/g, "");
 
     for (let { modifier, chance } of NAME_MODIFIERS) {
@@ -105,12 +115,12 @@ function modifyReplaceLeet(name) {
     return name;
 }
 
-function modifyAddSinglePrefix(name, maxLength) {
+function modifyAddSinglePrefix(name, isMale, maxLength) {
     let lengthAvailable = maxLength - name.length;
     return (lengthAvailable > 0 ? faker.random.arrayElement(SINGLE_LETTER_PREFIXES) : "") + name;
 }
 
-function modifyAddDuplicateLetters(name, maxLength) {
+function modifyAddDuplicateLetters(name, isMale, maxLength) {
     let lengthAvailable = maxLength - name.length;
     const duplicationLetters = _.shuffle(DUPLICATION_LETTERS);
     for (let letter of duplicationLetters) {
@@ -142,7 +152,7 @@ function modifyReplaceMakeTypos(name) {
     return name;
 }
 
-function modifyAddNumber(name, maxLength) {
+function modifyAddNumber(name, isMale, maxLength) {
     let lengthAvailable = maxLength - name.length;
 
     switch (lengthAvailable) {
@@ -161,7 +171,7 @@ function modifyAddNumber(name, maxLength) {
     }
 }
 
-function modifyAddWrap(name, maxLength) {
+function modifyAddWrap(name, isMale, maxLength) {
     let lengthAvailable = maxLength - name.length;
     let l, l1, l2, l3;
     l = faker.random.arrayElement(WRAP_LETTERS);
