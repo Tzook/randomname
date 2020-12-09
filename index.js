@@ -3,7 +3,9 @@ const _ = require("lodash");
 const fs = require("fs");
 let names;
 if (fs && fs.readFileSync) {
-    const file = fs.readFileSync("./names.txt", "utf-8");
+    const path = require("path");
+    const filename = path.resolve(__dirname, "names.txt");
+    const file = fs.readFileSync(filename, "utf-8");
     names = file.split("\n");
     names.pop(); // Remove the empty newline at the end.
 }
