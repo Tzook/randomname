@@ -1,7 +1,7 @@
 {
     "name": "mmo-name-generator",
     "description": "lala",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "main": "index",
     "dependencies": {
         "faker": "5.1.0",
