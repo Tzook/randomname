@@ -1,3 +1,3 @@
 const { getRandomName } = require("./index");
 
-console.log(getRandomName());
+console.log(`Name is: "${getRandomName()}".`);

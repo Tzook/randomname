@@ -6,7 +6,8 @@ if (fs && fs.readFileSync) {
     const path = require("path");
     const filename = path.resolve(__dirname, "names.txt");
     const file = fs.readFileSync(filename, "utf-8");
-    names = file.split("\n");
+    const cleanFile = file.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+    names = cleanFile.split("\n");
     names.pop(); // Remove the empty newline at the end.
 }
 
@@ -46,13 +47,13 @@ const NAME_MODIFIERS = [
 ];
 
 module.exports.getRandomName = function getRandomName({ isMale = true, maxLength = 16 } = {}) {
-    if (names && faker.random.boolean()) {
+    if (names && faker.datatype.boolean()) {
         return faker.random.arrayElement(names).slice(0, maxLength);
     }
     let name = getBaseName(isMale, maxLength).replace(/[^a-zA-Z0-9]/g, "");
 
     for (let { modifier, chance } of NAME_MODIFIERS) {
-        if (faker.random.number(chance - 1) === 0) {
+        if (faker.datatype.number(chance - 1) === 0) {
             name = modifier(name, isMale, maxLength);
         }
     }
@@ -66,7 +67,7 @@ function getMaleNumber(isMale) {
 
 function getBaseName(isMale, maxLength) {
     const gender = getMaleNumber(isMale);
-    const random = faker.random.number(3);
+    const random = faker.datatype.number(3);
     switch (random) {
         default:
         case 0:
@@ -87,14 +88,14 @@ function modifyReplaceLowercase(name) {
 
 function modifyAddPrefix(name, isMale, maxLength) {
     let lengthAvailable = maxLength - name.length;
-    if (faker.random.boolean()) {
+    if (faker.datatype.boolean()) {
         const color = faker.commerce.color().replace(/ /g, "");
         if (lengthAvailable >= color.length) {
             return capitalizeFirstLetter(color) + name;
         }
     }
     const prefixes = COMMON_PREFIXES.concat(isMale ? MALE_PREFIXES : FEMALE_PREFIXES).filter(
-        prefix => prefix.length <= lengthAvailable,
+        (prefix) => prefix.length <= lengthAvailable
     );
     return (prefixes.length > 0 ? faker.random.arrayElement(prefixes) : "") + name;
 }
@@ -102,15 +103,15 @@ function modifyAddPrefix(name, isMale, maxLength) {
 function modifyAddSuffix(name, isMale, maxLength) {
     let lengthAvailable = maxLength - name.length;
     const suffixes = COMMON_SUFFIXES.concat(isMale ? MALE_SUFFIXES : FEMALE_SUFFIXES).filter(
-        suffix => suffix.length <= lengthAvailable,
+        (suffix) => suffix.length <= lengthAvailable
     );
     return name + (suffixes.length > 0 ? faker.random.arrayElement(suffixes) : "");
 }
 
 function modifyReplaceLeet(name) {
     for (let letter in LEET_LANG) {
-        if (faker.random.boolean()) {
-            let regex = new RegExp(letter, faker.random.boolean() ? "g" : "");
+        if (faker.datatype.boolean()) {
+            let regex = new RegExp(letter, faker.datatype.boolean() ? "g" : "");
             name = name.replace(regex, LEET_LANG[letter]);
         }
     }
@@ -126,7 +127,7 @@ function modifyAddDuplicateLetters(name, isMale, maxLength) {
     let lengthAvailable = maxLength - name.length;
     const duplicationLetters = _.shuffle(DUPLICATION_LETTERS);
     for (let letter of duplicationLetters) {
-        if (lengthAvailable > 0 && faker.random.boolean()) {
+        if (lengthAvailable > 0 && faker.datatype.boolean()) {
             name = name.replace(letter, letter + letter);
             lengthAvailable = maxLength - name.length;
         }
@@ -135,18 +136,18 @@ function modifyAddDuplicateLetters(name, isMale, maxLength) {
 }
 
 function modifyReplaceCapitalize(name) {
-    const times = faker.random.number({ min: 1, max: 3 });
+    const times = faker.datatype.number({ min: 1, max: 3 });
     for (let i = 0; i < times; i++) {
-        const place = faker.random.number(name.length - 1);
+        const place = faker.datatype.number(name.length - 1);
         name = name.replace(name[place], name[place].toUpperCase());
     }
     return name;
 }
 
 function modifyReplaceMakeTypos(name) {
-    const times = faker.random.number({ min: 1, max: 2 });
+    const times = faker.datatype.number({ min: 1, max: 2 });
     for (let i = 0; i < times; i++) {
-        const place = faker.random.number(name.length - 1);
+        const place = faker.datatype.number(name.length - 1);
         if (place > 0) {
             name = name.replace(name[place - 1] + name[place], name[place] + name[place - 1]);
         }
@@ -161,15 +162,15 @@ function modifyAddNumber(name, isMale, maxLength) {
         case 0:
             return name;
         case 1:
-            return name + faker.random.number(9);
+            return name + faker.datatype.number(9);
         case 2:
-            return name + (faker.random.number(9) === 0 ? 69 : faker.random.number(99));
+            return name + (faker.datatype.number(9) === 0 ? 69 : faker.datatype.number(99));
         case 3:
         case 4:
-            const random = faker.random.number(29);
-            return name + (random > 6 ? faker.random.number(999) : 123 + random * 111);
+            const random = faker.datatype.number(29);
+            return name + (random > 6 ? faker.datatype.number(999) : 123 + random * 111);
         default:
-            return name + faker.random.number(10 ** faker.random.number({ min: 1, max: 5 }) - 1);
+            return name + faker.datatype.number(10 ** faker.datatype.number({ min: 1, max: 5 }) - 1);
     }
 }
 
@@ -177,9 +178,9 @@ function modifyAddWrap(name, isMale, maxLength) {
     let lengthAvailable = maxLength - name.length;
     let l, l1, l2, l3;
     l = faker.random.arrayElement(WRAP_LETTERS);
-    l1 = faker.random.number(2) === 0 ? l.toUpperCase() : l;
-    l2 = faker.random.number(2) === 0 ? l.toUpperCase() : l;
-    l3 = faker.random.number(2) === 0 ? l.toUpperCase() : l;
+    l1 = faker.datatype.number(2) === 0 ? l.toUpperCase() : l;
+    l2 = faker.datatype.number(2) === 0 ? l.toUpperCase() : l;
+    l3 = faker.datatype.number(2) === 0 ? l.toUpperCase() : l;
 
     switch (lengthAvailable) {
         case 0:
@@ -195,7 +196,7 @@ function modifyAddWrap(name, isMale, maxLength) {
         default:
         case 6:
         case 7:
-            switch (faker.random.number(2)) {
+            switch (faker.datatype.number(2)) {
                 case 0:
                     return single();
                 case 1:
@@ -211,12 +212,12 @@ function modifyAddWrap(name, isMale, maxLength) {
     }
 
     function double() {
-        if (l === "x" && faker.random.number(3) === 0) {
+        if (l === "x" && faker.datatype.number(3) === 0) {
             // add d so it will look like xD
             l2 = l2 === "x" ? "d" : "D";
         }
         let start = l1 + l2;
-        if (faker.random.number(3) === 0) {
+        if (faker.datatype.number(3) === 0) {
             start = "";
         }
 
