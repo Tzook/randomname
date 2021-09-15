@@ -19,7 +19,7 @@ if (fs && fs.readFileSync) {
 }
 
 const COMMON_PREFIXES = ["lol", "lel", "kek", "haha", "hehe", "Epic", "Evil", "Demon", "Bad", "The", "New", "My"];
-const FEMALE_PREFIXES = ["Ms", "Mrs", "Miss", "Sexy", "Sakura", "Kitty", "Lovely", "Angel", "Hot", "Lady"];
+const FEMALE_PREFIXES = ["Ms", "Mrs", "Miss", "Sakura", "Kitty", "Lovely", "Angel", "Hot", "Lady"];
 const MALE_PREFIXES = ["asdf", "Mr", "Noob", "Dr", "Pro", "Sasuke", "Naruto", "Ninja", "Zen"];
 
 const COMMON_SUFFIXES = ["Jr", "Sr", "MD", "PhD", "HD", "XX", "Meow", "Arrow"];
