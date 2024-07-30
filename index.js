@@ -57,7 +57,7 @@ const NAME_MODIFIERS = [
     { modifier: modifyAddWrap, chance: 4 },
 ];
 
-module.exports.getRandomName = function getRandomName({ isMale, maxLength = 16 }) {
+module.exports.getRandomName = function getRandomName({ isMale, maxLength = 16 } = {}) {
     if (names && faker.datatype.boolean()) {
         return faker.random.arrayElement(names).slice(0, maxLength);
     }
