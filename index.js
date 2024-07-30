@@ -61,7 +61,7 @@ module.exports.getRandomName = function getRandomName({ isMale, maxLength = 16 }
     if (names && faker.datatype.boolean()) {
         return faker.random.arrayElement(names).slice(0, maxLength);
     }
-    if (isMale === undefined) {
+    if (typeof isMale !== "boolean") {
         isMale = faker.datatype.boolean() === true;
     }
     let name = getBaseName(isMale, maxLength).replace(/[^a-zA-Z0-9]/g, "");
