@@ -44,7 +44,7 @@
             const generate = document.getElementById("generate");
             const result = document.getElementById("result");
             generate.addEventListener("click", () => {
-                result.innerText = window.getRandomName();
+                result.innerText = window.getRandomName({ maxLength: 12 });
             });
         </script>
     </body>
