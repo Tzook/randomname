@@ -9,6 +9,17 @@ if (fs && fs.readFileSync) {
     const cleanFile = file.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
     names = cleanFile.split("\n");
     names.pop(); // Remove the empty newline at the end.
+} else {
+    fetch(new Request(`names.txt`))
+        .then((response) => response.text())
+        .then((file) => {
+            const cleanFile = file.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+            names = cleanFile.split("\n");
+            names.pop(); // Remove the empty newline at the end.
+        })
+        .catch((error) => {
+            console.error("Error fetching texts", error);
+        });
 }
 
 const COMMON_PREFIXES = ["lol", "lel", "kek", "haha", "hehe", "Epic", "Evil", "Demon", "Bad", "The", "New", "My"];
@@ -46,7 +57,7 @@ const NAME_MODIFIERS = [
     { modifier: modifyAddWrap, chance: 4 },
 ];
 
-module.exports.getRandomName = function getRandomName({ isMale = true, maxLength = 16 } = {}) {
+module.exports.getRandomName = function getRandomName({ isMale = faker.datatype.boolean(), maxLength = 16 }) {
     if (names && faker.datatype.boolean()) {
         return faker.random.arrayElement(names).slice(0, maxLength);
     }
